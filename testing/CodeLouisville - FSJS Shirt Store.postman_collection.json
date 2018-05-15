@@ -71,7 +71,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": ""
+							"raw": "{\n\t\"test\": \"testing\"\n}"
 						},
 						"url": {
 							"raw": "localhost:3030/api/shirt",
