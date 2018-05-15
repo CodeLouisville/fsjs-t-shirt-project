@@ -1,0 +1,150 @@
+{
+	"info": {
+		"name": "CodeLouisville - FSJS Shirt Store",
+		"_postman_id": "78f431f5-bc36-4a8e-b6c4-a1cebbcfd833",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET - READ",
+			"description": "The get/read api calls",
+			"item": [
+				{
+					"name": "Get all shirts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "localhost:3030/api/shirt",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"api",
+								"shirt"
+							]
+						},
+						"description": "Get all shirts"
+					},
+					"response": []
+				},
+				{
+					"name": "Get a specific shirt by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "localhost:3030/api/shirt/b",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"api",
+								"shirt",
+								"b"
+							]
+						},
+						"description": "Get a single shirt"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "POST - CREATE",
+			"description": "The post/create api calls",
+			"item": [
+				{
+					"name": "Create a shirt",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:3030/api/shirt",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"api",
+								"shirt"
+							]
+						},
+						"description": "Creates a shirt using the api"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PUT - UPDATE",
+			"description": "The put/update api calls",
+			"item": [
+				{
+					"name": "Update a shirt by id",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "localhost:3030/api/shirt/a",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"api",
+								"shirt",
+								"a"
+							]
+						},
+						"description": "Updates a shirt of a given id"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "DELETE",
+			"description": "The delete api calls",
+			"item": [
+				{
+					"name": "Delete a shirt by id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "localhost:3030/api/shirt/a",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"api",
+								"shirt",
+								"a"
+							]
+						},
+						"description": "Deletes a shirt by id api call"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
