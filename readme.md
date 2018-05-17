@@ -6,6 +6,7 @@
 * Render data from the server on our page
 * Add POST and PUT endpoints
 
+
 ## Set up the project
 _It should still be setup from *week 3* branch_
 1. Clean the project
@@ -95,7 +96,7 @@ function refreshShirtList() {
 ```
 Test it out by refreshing the page, opening a debugging console, and typing `refreshShirtList()`;
 
-6. Refresh the list automatically when the page first loads by adding  `refreshShirtList()` to the remaining `$(document).ready(function() {` function in `index.html`
+6. Refresh the list automatically when the page first loads by adding  `refreshShirtList()` to the remaining `$().ready()` function in `index.html`
 
 ## Finish What we started
 1. We are going to be sending data from the client back to the server.  To do that, we will convert a plain JS object to a JSON-formatted string (really, jQuery will do that for us).  We need to set up our express server to parse that JSON string and turn it back in to an object.
@@ -156,3 +157,4 @@ router.put('/shirt/:shirtId', function(req, res, next) {
   res.json(shirt);
 });
 ```
+
