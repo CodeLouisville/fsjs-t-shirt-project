@@ -24,7 +24,7 @@ npm install
 ```
 
 ## Render data from the server
-We have a nice API endpoint to spit out data (albeit static data from an array).  Let's use that in our front-end.  
+We have a nice API endpoint to spit out data (albeit static data from an array).  Let's use that in our front-end.
 
 1. Create a new file in a new directory: `public\js\app.js`.
 (We could continue to put all our javascript in `script` tags in `index.html`, but placing this code in a separate file will help keep things neat and organized)
@@ -34,8 +34,8 @@ We have a nice API endpoint to spit out data (albeit static data from an array).
 <script src="/js/app.js"></script>
 ```
 
-3. Update our handlebars template to render a file and not a BTVS character list.  Replace the `getList` function in `index.html` with the following:
-```html
+3. Update our jQuery template to render a file and not a BTVS character list.  Replace the `getList` function in `index.html` with the following:
+```javascript
 // our jquery template string
 function listItemTemplate(data) {
   var compiled = '';
