@@ -8,33 +8,16 @@ const SHIRTS = [
   {id: 'd', name: 'coffee', description: 'A pick me up', price: 15.0}
 ];
 
-router.use('/doc', function(req, res, next) {
-  res.end(`Documentation http://expressjs.com/`);
-});
-
 router.get('/shirt', function(req, res, next) {
   res.json(SHIRTS);
 });
 
 router.post('/shirt', function(req, res, next) {
-  const newId = '' + SHIRTS.length;
-  const data = req.body;
-  data.id = newId;
-
-  SHIRTS.push(data);
-  res.status(201).json(data);
+  res.end('Creates a new shirt');
 });
 
 router.put('/shirt/:shirtId', function(req, res, next) {
-  const {shirtId} = req.params;
-  const shirt = SHIRTS.find(entry => entry.id === shirtId);
-  if (!shirt) {
-    return res.status(404).end(`Could not find shirt '${shirtId}'`);
-  }
-
-  shirt.name = req.body.name;
-  shirt.description = req.body.description;
-  res.json(shirt);
+  res.end(`Updating a shirt '${req.params.shirtId}'`);
 });
 
 router.delete('/shirt/:shirtId', function(req, res, next) {

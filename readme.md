@@ -6,6 +6,7 @@
 * Render data from the server on our page
 * Add POST and PUT endpoints
 
+
 ## Set up the project
 _It should still be setup from *week 3* branch_
 1. Clean the project
@@ -93,9 +94,9 @@ function refreshShirtList() {
     })
 }
 ```
-Test it out by refreshing the page, opening a debugging console, and typing `refreshShirtList()`;
+Test it out by refreshing the page, opening a debugging console, and typing `refreshFileList()`;
 
-6. Refresh the list automatically when the page first loads by adding  `refreshShirtList()` to the remaining `$(document).ready(function() {` function in `index.html`
+6. Refresh the list automatically when the page first loads by adding  `refreshFileList()` to the remaining `$().ready()` function in `index.html`
 
 ## Finish What we started
 1. We are going to be sending data from the client back to the server.  To do that, we will convert a plain JS object to a JSON-formatted string (really, jQuery will do that for us).  We need to set up our express server to parse that JSON string and turn it back in to an object.
@@ -133,26 +134,26 @@ Head over to postman. Create a POST request to ANY endpoint.  Tell postman that 
 
 5. Go back to our routes and add the POST and PUT endpoints. In `routes/index.js`, swap out the `router.put()` and `router.post()` callbacks (which were just placeholders) with the following:
 ```javascript
-router.post('/shirt', function(req, res, next) {
-  const newId = '' + SHIRTS.length;
+router.post('/file', function(req, res, next) {
+  const newId = '' + FILES.length;
   const data = req.body;
   data.id = newId;
 
-  SHIRTS.push(data);
+  FILES.push(data);
   res.status(201).json(data);
 });
 ```
 and
 ```javascript
-router.put('/shirt/:shirtId', function(req, res, next) {
-  const {shirtId} = req.params;
-  const shirt = SHIRTS.find(entry => entry.id === shirtId);
-  if (!shirt) {
-    return res.status(404).end(`Could not find shirt '${shirtId}'`);
+router.put('/file/:fileId', function(req, res, next) {
+  const {fileId} = req.params;
+  const file = FILES.find(entry => entry.id === fileId);
+  if (!file) {
+    return res.status(404).end(`Could not find file '${fileId}'`);
   }
 
-  shirt.name = req.body.name;
-  shirt.description = req.body.description;
-  res.json(shirt);
+  file.title = req.body.title;
+  file.description = req.body.description;
+  res.json(file);
 });
 ```
