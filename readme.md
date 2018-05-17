@@ -15,7 +15,7 @@ _If you did something you want to keep, last week, you can make a branch and com
 cd FSJS-class-project
 git status
 git add .
-git commit -m"My commit message"
+git commit -m "My commit message"
 git checkout --track origin/week2
 ```
 
@@ -78,7 +78,7 @@ Note: We previously had a "Hello World" endpoint that was served when user's req
 [[Documentation for jQuery](https://api.jquery.com/)]
 [[Documentation for Handlebars](http://handlebarsjs.com/reference.html)]
 
-2. Drop a quick template in `index.html` to see how handlebars renders content:
+2. Drop a quick template in `index.html` to see how jQuery renders content:
 ```html
 <script>
   $(document).ready(function() {
@@ -98,7 +98,7 @@ Note: We previously had a "Hello World" endpoint that was served when user's req
 ```
 
 4. Create some fake data in another script tag, add this to the *bottom* of the `$(document).ready(function() {` before the `});`.
-```html
+```javascript
 // let's setup some fake data array of javascript objects
 // each javascript object has a name and a value property
 const data = {
@@ -112,8 +112,8 @@ const data = {
 ```
 
 5. Create a template for each list item, add this *above* the `$(document).ready(function() {`.
-```html
-// our jquery template string
+```javascript
+// our jQuery template string
 function getList(data) {
   var compiled = '';
   data.forEach(item => {
