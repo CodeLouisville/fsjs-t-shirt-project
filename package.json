@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "This is a sample node project",
   "main": "index.js",
-  "scripts": {
-    "start": "nodemon index.js"
-  },
   "keywords": [
     "code",
     "louisville",
