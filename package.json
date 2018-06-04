@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "This is a sample node project",
   "main": "index.js",
-  "scripts": {
-    "start": "nodemon index.js"
-  },
   "keywords": [
     "code",
     "louisville",
@@ -15,6 +12,7 @@
   "author": "Aaron W. Johnson",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.14.0"
+    "express": "^4.14.0",
+    "nodemon": "^1.17.5"
   }
 }
