@@ -12,7 +12,6 @@
   "author": "Aaron W. Johnson",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.14.0",
-    "nodemon": "^1.17.5"
+    "express": "^4.14.0"
   }
 }
