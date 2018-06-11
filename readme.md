@@ -9,7 +9,7 @@
 ## Set up the project
 _It should still be setup from *week 3* branch_
 1. Clean the project
-_If you did something you want to keep, last week, you can make a branch and commit, or copy those files out.  To continue here, we are going to grab the week3 branch._
+_If you did something you want to keep, last week, you can make a branch and commit, or copy those files out.  To continue here, we are going to grab the week4 branch._
 ```
 cd FSJS-class-project
 git status
