@@ -43,8 +43,10 @@ npm install
 5. Install mongoose
 ```
 npm install mongoose --save
+npm install dotenv --save
 ```
-**Mongoose Documentation:** http://mongoosejs.com/docs/api.html
+**Mongoose Documentation:** http://mongoosejs.com/docs/api.html 
+**dotenv Documentation:** https://github.com/motdotla/dotenv
 
 ## HOLD THE PHONE...
 **What is Mongo? Sounds like a cartoon character"s name...**
@@ -58,6 +60,61 @@ Mongoose is an ORM (Object Relational Mapping) tool.  It is used in your applica
 
 ![Mongoose Diagram](mongoose_diag.png)
 
+## WHAT IS DOTENV?!
+
+Dotenv let's you pull environmant variables, defined in a special file, in to your application.  
+Environment variables are `key=value` pairs that are stored by your operating system.
+
+### WHY, OH WHY ARE WE DOING THIS?!
+You have a username and password for your database, right? This is sensitive information that you don't want the world to know. BUT you still have to put it in your database somewhere.
+**If you put usernames and passwords in a config file and commit that files to your repository, your credentials will be publically viewable on your github page!**
+
+So how do you store sensitive information?
+
+1. Put your credentials in a file called `.env` (note the dot '.').
+2. Make sure the `.env` file is **NOT** committed to your repository by editing your `.gitignore` file
+3. Use `dotenv` to add those credentials to the local system's list of environment variables.
+4. Make use of the varable anywhere you want using Node's global variable `process.env.YOUR_VARIABLE`
+
+### Details...
+1. Create a `.env` file in your root directory
+```
+DB_HOST=<db host>
+DB_NAME=<db name>
+DB_USERNAME=<db username you created for mlab>
+DB_PASSWORD=<password for the mlab db user>
+```
+
+2. Update your `.gitignore` file so that the `.env` file is NOT committed to your repository by adding the following:
+```
+.env
+```
+
+3. (and 4.) Edit your config file (`src/config/index.js`) to trigger dotenv and to pull your credentials from the environment.
+```javascript
+require('dotenv').config();
+
+module.exports = {
+  appName: 'Our Glorious Node Project',
+  port: 3030,
+  db: {
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    host:     process.env.DB_HOST,
+    dbName:   process.env.DB_NAME,
+  },
+};
+```
+
+### So how do other people connect to the database?
+You have to give them a username and password using some other means.  Any of these will do:
+* Email your `.env` to whomever needs the credentials
+* Some secure file transfer
+* Slack it to them
+* Call them on the phone
+* Carrier pigeon
+
+**When you turn in your CodeLouisville Project, you will need to provide your dotenv file to your mentors**
 
 ## Create a model using mongoose
 
@@ -68,35 +125,18 @@ Mongoose is an ORM (Object Relational Mapping) tool.  It is used in your applica
 4. Use Mongo in our route handlers instead of the array we"ve been using.
 5. Add some test data.
 
-
 ### Configure our app to work with mongo
-1. Edit our config file (at `src/config/index.js`) so that the returned configuration object includes mongo configuration:
-    ```javascript
-    module.exports = {
-      appName: "Our Glorious Node Project",
-      port: 3030,
-      db: {
-        host: "xxxxxxx.mlab.com:xxxxx",
-        dbName: "my-database",
-        user: "foo",
-        password: "bar"
-      }
-    };
-    ```
-
-2. Connect to mongo through the mongoose library.  In `src/server.js`, somewhere near the top of the file, import mongoose with
-    ```javascript
-    // Load mongoose package
-    const mongoose = require("mongoose");
-    ```
-    Then, somewhere AFTER the line where you load your configuration, connect with the following
-    ```javascript
-    // Connect to MongoDB and create/use database as configured
-    mongoose
-     .connection
-     .openUri(`mongodb://${config.db.user}:${config.db.password}@${config.db.host}/${config.db.dbName}`);
-    ```
-
+1. Connect to mongo through the mongoose library.  
+In `src/server.js`, somewhere near the top of the file, import mongoose with the following.  Note that when we connect to the mongo server, we are piecing together the connection string handed to us by mLab.
+```javascript
+// Load mongoose package
+const mongoose = require('mongoose');
+```
+Then, somewhere AFTER the line where you load your configuration, connect with the following
+```javascript
+// Connect to MongoDB and create/use database as configured
+mongoose.connection.openUri(`mongodb://${config.db.username}:${config.db.password}@${config.db.host}/${config.db.dbName}`);
+```
 
 ### Build the model
 
