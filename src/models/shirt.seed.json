@@ -1,0 +1,22 @@
+[
+    {
+      "name": "iron man shirt",
+      "description": "iron man flying high",
+      "price": 9.99
+    },
+    {
+      "name": "cats-r-us",
+      "description": "toys-r-us logo saying cats-r-us",
+      "price": 8.99
+    },
+    {
+      "name": "coffee",
+      "description": "a cup of coffee elegantly portrayed",
+      "price": 11.99
+    },
+    {
+      "name": "dogs",
+      "description": "need i say more?",
+      "price": 89.99
+    }
+  ]

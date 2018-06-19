@@ -1,14 +1,16 @@
 const router = require('express').Router();
-
-const SHIRTS = [
-    { id: 'a', name: 'Cat tree', description: 'A cute cat shirt', price: 20.0 },
-    { id: 'b', name: 'iron man', description: 'tony stark in a suit', price: 10.0 },
-    { id: 'c', name: 'snow man', description: 'A cool shirt', price: 12.50 },
-    { id: 'd', name: 'coffee', description: 'A pick me up', price: 15.0 }
-];
+// Import all models
+let shirt = require("../models/shirt.model.js");
 
 router.get('/shirt', function (req, res, next) {
-    res.json(SHIRTS);
+  shirt.find({}, function(err, shirts) {
+    if (err) {
+      console.log(err);
+      return res.status(500).json(err);
+    }
+  
+    res.json(shirts);
+  });
 });
 
 router.get('/shirt/:shirtId', function (req, res, next) {
