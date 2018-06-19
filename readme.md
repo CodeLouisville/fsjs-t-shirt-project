@@ -102,7 +102,7 @@ module.exports = {
     password: process.env.DB_PASSWORD,
     host:     process.env.DB_HOST,
     dbName:   process.env.DB_NAME,
-  },
+  }
 };
 ```
 
@@ -153,7 +153,7 @@ mongoose.connection.openUri(`mongodb://${config.db.username}:${config.db.passwor
       name: String,
       description: String,
       price: Number,
-      created_at: { type: Date, default: Date.now },
+      created_at: { type: Date, default: Date.now }
     });
     ```
     Notice that the `name` and `description` fields are also present in our faked data (`/src/routes/index.js`).  We"ve also added a new field called `created_at`, which will be a Date and will default to the current time.
@@ -165,21 +165,16 @@ mongoose.connection.openUri(`mongodb://${config.db.username}:${config.db.passwor
     ```
     A lot is going on here.  We are storing the `Shirt` schema inside the mongoose object (which will make it available anywhere in your application).  We"re also giving a name ("Shirt") so we can distinguish it from any other model we may want to register.  We"re also exporting the model from this module.
 
-5. Make sure that the `shirt.model.js` script is run by `require`-ing it somewhere...like in `src/server.js`, below the line where we connect mongoose to mongo:
-    ```javascript
-    // Import all models
-    require("./models/shirt.model.js");
-    ```
-
 ## Connect to our app
 1. In `src/routes/index.js`, pull in mongoose at the top of the file.
     ```javascript
-    const mongoose = require("mongoose");
+    // Import all models
+    let shirt = require("../models/shirt.model.js");
     ```
 
 2. Edit the `GET /shirt` route.  Replace our development code with
     ```javascript
-    mongoose.model("Shirt").find({}, function(err, shirts) {
+    shirt.find({}, function(err, shirts) {
       if (err) {
         console.log(err);
         return res.status(500).json(err);
@@ -217,7 +212,7 @@ Strategy: On startup, check if there are any shirts in the database, if not, the
         "name": "dogs",
         "description": "need i say more?",
         "price": 89.99
-      },
+      }
     ]
     ```
 
