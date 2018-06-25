@@ -171,7 +171,7 @@ Restart the server, go back to our website and add a new Shirt.  Our list of shi
 ## Now, prettify it
  1. Add Header to list, add the following right above the `<div id="list-container"></div>` line in `index.html`
  ```html
-<div><legend>Shirts: <span class="glyphicon glyphicon-align-left glyphicon-plus-sign" aria-hidden="true" onclick="toggleAddShirtForm()"></span></legend></div>
+<div><legend>Shirts: <span id="add-shirt-button" class="glyphicon glyphicon-align-left glyphicon-plus-sign" aria-hidden="true" ></span></legend></div>
 ```
 
  2. Bind the `onclick` event to do something
@@ -201,7 +201,14 @@ function hideAddShirtForm(){
  5. Update `cancelShirtForm` to also toggle
 ```javascript
 function cancelShirtForm() {
+    $('#add-shirt-form').reset();
     hideAddShirtForm();
 }
 ```
+
+ 6. Let's clear the fields on submit and hide it; after `refreshShirtList()` in the new fetch code add the following:
+ ```javascript
+cancelShirtForm();
+```
+
 
