@@ -22,7 +22,7 @@ npm install
 **Strategy:** 
 * A User will visit the site and see a form for adding a shirt.  
 * Our user will use that form to add a new shirt to the database.  
-* The form has fields for `title` and `description` fields, a `Submit` and a `Cancel` button.  
+* The form has fields for `name`, `description`, and `price` fields, a `Submit` and a `Cancel` button.  
 * The `Submit` and `Cancel` buttons do exactly what you think they would do.  
 * The `Submit` button will trigger a javascript function that grabs the data from the form and POSTs it to an API endpoint (we already have one...remember it?)
 * After POSTing the data and receiving a response, the page will refresh the list of shirts.
