@@ -7,7 +7,27 @@
   </head>
   <body>
     <h1>A wild webpage appears...</h1>
+    <div><legend>Shirts: <span class="glyphicon glyphicon-align-left glyphicon-plus-sign" aria-hidden="true" onclick="toggleAddShirtForm()"></span></legend></div>
     <div id="list-container"></div>
+    <div id="form-container" class="panel">
+      <form id="add-shirt-form" style="display: none;">
+        <legend>Shirt</legend>
+        <div class="form-group">
+          <label for="shirt-name">Name</label>
+          <input type="text" class="form-control" id="shirt-name" placeholder="Name">
+        </div>
+        <div class="form-group">
+          <label for="shirt-description">Description</label>
+          <input type="text" class="form-control" id="shirt-description" placeholder="Description">
+        </div>
+        <div class="form-group">
+          <label for="shirt-price">Price</label>
+          <input type="text" class="form-control" id="shirt-price" placeholder="Price">
+        </div>
+        <button type="button" onclick="submitShirtForm()" class="btn btn-success">Submit</button>
+        <button type="button" onclick="cancelShirtForm()" class="btn btn-link">cancel</button>
+      </form>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
       $(document).ready(function() {

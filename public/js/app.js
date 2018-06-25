@@ -4,7 +4,7 @@ function listItemTemplate(data) {
   data.forEach(item => {
     compiled += `
       <li class="list-group-item">
-        <strong>${item.name}</strong> - ${item.description}
+        <strong>${item.name}</strong> - ${item.description} - ${item.price}
       </li>
     `;
   });
@@ -29,4 +29,38 @@ function refreshShirtList() {
       const data = {shirts: shirts};
       $('#list-container').html(listItemTemplate(data.shirts));
     })
+}
+
+function submitShirtForm() {
+    console.log("You clicked 'submit'. Congratulations.");
+
+    const shirtData = {
+        name: $('#shirt-name').val(),
+        description: $('#shirt-description').val(),
+        price: $('#shirt-price').val()
+    };
+
+    fetch('/api/shirt', {
+        method: 'post',
+        body: JSON.stringify(shirtData),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(shirt => {
+            console.log("we have posted the data", shirt);
+        refreshShirtList();
+    })
+    .catch(err => {
+            console.error("A terrible thing has happened", err);
+    })
+}
+
+function cancelShirtForm() {
+    toggleAddShirtForm();
+}
+
+function toggleAddShirtForm(){
+    $('#add-shirt-form').toggle();
 }

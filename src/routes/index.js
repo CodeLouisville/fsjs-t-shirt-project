@@ -26,12 +26,20 @@ router.get('/shirt/:shirtId', function (req, res, next) {
 });
 
 router.post('/shirt', function(req, res, next) {
-  const newId = '' + SHIRTS.length;
-  const data = req.body;
-  data.id = newId;
+    const shirtData = {
+        name: req.body.name,
+        description: req.body.description,
+        price: req.body.price
+    };
 
-  SHIRTS.push(data);
-  res.status(201).json(data);
+    shirt.create(shirtData, function(err, newShirt) {
+        if (err) {
+            console.error(err);
+            return res.status(500).json(err);
+        }
+
+        res.json(newShirt);
+    });
 });
 
 router.put('/shirt/:shirtId', function(req, res, next) {
