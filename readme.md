@@ -95,18 +95,18 @@ Test the buttons to make sure they work....
 Great! They work, but they don't do much. Let's change that, one step at a time.
 
 5. Add the following to our `submitShirtForm` function after the `console.log` line:
-  ```javascript
- function submitShirtForm() {
-   console.log("You clicked 'submit'. Congratulations.");
-
-   const shirtData = {
+```javascript
+function submitShirtForm() {
+    console.log("You clicked 'submit'. Congratulations.");
+    
+    const shirtData = {
        name: $('#shirt-name').val(),
        description: $('#shirt-description').val(),
        price: $('#shirt-price').val()
-   };
-
-   console.log("Your shirt data", shirtData);
- }
+    };
+    
+    console.log("Your shirt data", shirtData);
+}
  ```
 
 ## Fetch, our POSTing hero
@@ -116,34 +116,33 @@ We're going to POST json-formatted data to an endpoint on our server which will 
 First, we'll use fetch to POST the data, then we'll fix our POST route.
 
 1. Add the following to our `submitShirtForm` function AFTER we create the shirtData object.
-  ```javascript
-  fetch('/api/shirt', {
+```javascript
+fetch('/api/shirt', {
     method: 'post',
     body: JSON.stringify(shirtData),
     headers: {
-      'Content-Type': 'application/json'
-    }
-  })
+        'Content-Type': 'application/json'
+    }})
     .then(response => response.json())
     .then(shirt => {
-      console.log("we have posted the data", shirt);
-      refreshShirtList();
+        console.log("we have posted the data", shirt);
+        refreshShirtList();
     })
     .catch(err => {
-      console.error("A terrible thing has happened", err);
+        console.error("A terrible thing has happened", err);
     }) 
-  ```
-  If we refresh the page and test this, it will NOT work. Why?
+```
+If we refresh the page and test this, it will NOT work. Why?
 
 
 ## Now, fix the POST route handler
 
 1. Open the shirt `src/routes/index.js` and delete everything in our `POST /shirt` handler.  It should look like this when we're done:
-  ```javascript
-  router.post('/shirt', function(req, res, next) {
+```javascript
+router.post('/shirt', function(req, res, next) {
 
-  });
-  ```
+});
+```
 
 2. Instead of appending to an array, we will use our mongoose model to insert a new "shirt" in to the database.  Change the `POST /shirt` handler to the following:
 ```javascript
@@ -164,33 +163,45 @@ router.post('/shirt', function(req, res, next) {
     });
 });
 ```
-  [Documentation for mongoose Model.create](http://mongoosejs.com/docs/api.html#model_Model.create)
+[Documentation for mongoose Model.create](http://mongoosejs.com/docs/api.html#model_Model.create)
 
-  Restart the server, go back to our website and add a new Shirt.  Our list of shirts should update.  We can reload the page and/or restart the server and we will still have our newly added shirt in the list.
+Restart the server, go back to our website and add a new Shirt.  Our list of shirts should update.  We can reload the page and/or restart the server and we will still have our newly added shirt in the list.
   
   
 ## Now, prettify it
  1. Add Header to list, add the following right above the `<div id="list-container"></div>` line in `index.html`
- ```javascript
+ ```html
 <div><legend>Shirts: <span class="glyphicon glyphicon-align-left glyphicon-plus-sign" aria-hidden="true" onclick="toggleAddShirtForm()"></span></legend></div>
 ```
 
- 2. Hide the form on start
+ 2. Bind the `onclick` event to do something
+
 ```javascript
+$('#add-shirt-button').on('click', () => {
+   showAddShirtForm();
+});
+```
+
+ 3. Hide the form on start
+```html
 <form id="add-shirt-form" style="display: none;">
 ```
 
- 3. Add `toggleAddShirtForm` to `app.js`
+ 4. Add `toggleAddShirtForm` to `app.js`
  ```javascript
-function toggleAddShirtForm(){
-    $('#add-shirt-form').toggle();
+function showAddShirtForm(){
+    $('#add-shirt-form').show();
+}
+
+function hideAddShirtForm(){
+    $('#add-shirt-form').hide();
 }
 ```
 
- 4. Update `cancelShirtForm` to also toggle
+ 5. Update `cancelShirtForm` to also toggle
 ```javascript
 function cancelShirtForm() {
-    toggleAddShirtForm();
+    hideAddShirtForm();
 }
 ```
 
