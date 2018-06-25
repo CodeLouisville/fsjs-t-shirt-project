@@ -7,7 +7,7 @@
   </head>
   <body>
     <h1>A wild webpage appears...</h1>
-    <div><legend>Shirts: <span class="glyphicon glyphicon-align-left glyphicon-plus-sign" aria-hidden="true" onclick="toggleAddShirtForm()"></span></legend></div>
+    <div><legend>Shirts: <span id="add-shirt-button" class="glyphicon glyphicon-align-left glyphicon-plus-sign" aria-hidden="true"></span></legend></div>
     <div id="list-container"></div>
     <div id="form-container" class="panel">
       <form id="add-shirt-form" style="display: none;">
@@ -37,7 +37,9 @@
         const greetingTemplate = `<p>Hello ${welcome.name}! I am a template!<p>`;
         // put the template data into the actual page
         $('body h1').first().after(greetingTemplate);
-
+        $('#add-shirt-button').on('click', () => {
+           showAddShirtForm();
+        });
         refreshShirtList();
       });
     </script>

@@ -1,14 +1,14 @@
 // our jquery template string
 function listItemTemplate(data) {
-  var compiled = '';
-  data.forEach(item => {
-    compiled += `
+    var compiled = '';
+    data.forEach(item => {
+        compiled += `
       <li class="list-group-item">
         <strong>${item.name}</strong> - ${item.description} - ${item.price}
       </li>
     `;
-  });
-  return compiled;
+});
+    return compiled;
 }
 
 function getShirts() {
@@ -58,9 +58,13 @@ function submitShirtForm() {
 }
 
 function cancelShirtForm() {
-    toggleAddShirtForm();
+    hideAddShirtForm();
 }
 
-function toggleAddShirtForm(){
-    $('#add-shirt-form').toggle();
+function showAddShirtForm(){
+    $('#add-shirt-form').show();
+}
+
+function hideAddShirtForm(){
+    $('#add-shirt-form').hide();
 }
