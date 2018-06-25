@@ -169,7 +169,7 @@ router.post('/shirt', function(req, res, next) {
   Restart the server, go back to our website and add a new Shirt.  Our list of shirts should update.  We can reload the page and/or restart the server and we will still have our newly added shirt in the list.
   
   
- #Now let's make it pretty
+## Now, prettify it
  1. Add Header to list, add the following right above the `<div id="list-container"></div>` line in `index.html`
  ```javascript
 <div><legend>Shirts: <span class="glyphicon glyphicon-align-left glyphicon-plus-sign" aria-hidden="true" onclick="toggleAddShirtForm()"></span></legend></div>
