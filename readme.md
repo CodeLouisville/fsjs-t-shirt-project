@@ -111,14 +111,16 @@ function handleEditShirtClick(element) {
 6. Edit the `handleEditShirtClick()` function so that it opens the form we created last week.  When clicked, we should also populate the form with the data we wish to edit.
 ```javascript
 function handleEditShirtClick (element) {
-  const shirtId = element.getAttribute('data-shirt-id')
+  const shirtId = element.getAttribute('data-shirt-id');
 
   const shirt = window.shirtList.find(shirt => shirt._id === shirtId)
   if (shirt) {
-    $('#shirt-title').val(shirt.title)
-    $('#shirt-description').val(shirt.description)
-    $('#shirt-price').val(shirt.price)
+    $('#shirt-title').val(shirt.title);
+    $('#shirt-description').val(shirt.description);
+    $('#shirt-price').val(shirt.price);
   }
+
+  showAddShirtForm();
 }
 ```
 
