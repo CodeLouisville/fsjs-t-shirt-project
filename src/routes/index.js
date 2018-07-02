@@ -1,69 +1,82 @@
-const router = require('express').Router();
+const router = require('express').Router()
 // Import all models
-let shirt = require("../models/shirt.model.js");
+let shirt = require('../models/shirt.model.js')
 
 router.get('/shirt', function (req, res, next) {
-  shirt.find({}, function(err, shirts) {
+  shirt.find({}, function (err, shirts) {
     if (err) {
-      console.log(err);
-      return res.status(500).json(err);
+      console.log(err)
+      return res.status(500).json(err)
     }
-  
-    res.json(shirts);
-  });
-});
+
+    res.json(shirts)
+  })
+})
 
 router.get('/shirt/:shirtId', function (req, res, next) {
-    const { shirtId } = req.params;
-    // same as 'const shirtId = req.params.shirtId'
+  const { shirtId } = req.params
+  // same as 'const shirtId = req.params.shirtId'
 
-    const shirt = SHIRTS.find(entry => entry.id === shirtId);
-    if (!shirt) {
-        return res.status(404).end(`Could not find shirt '${shirtId}'`);
+  const shirt = SHIRTS.find(entry => entry.id === shirtId)
+  if (!shirt) {
+    return res.status(404).end(`Could not find shirt '${shirtId}'`)
+  }
+
+  res.json(shirt)
+})
+
+router.post('/shirt', function (req, res, next) {
+  const shirtData = {
+    name: req.body.name,
+    description: req.body.description,
+    price: req.body.price
+  }
+
+  shirt.create(shirtData, function (err, newShirt) {
+    if (err) {
+      console.error(err)
+      return res.status(500).json(err)
     }
 
-    res.json(shirt);
-});
+    res.json(newShirt)
+  })
+})
 
-router.post('/shirt', function(req, res, next) {
-    const shirtData = {
-        name: req.body.name,
-        description: req.body.description,
-        price: req.body.price
-    };
+router.put('/shirt/:shirtId', function (req, res, next) {
+  const shirtId = req.params.shirtId
 
-    shirt.create(shirtData, function(err, newShirt) {
-        if (err) {
-            console.error(err);
-            return res.status(500).json(err);
-        }
+  shirt.findById(shirtId, function (err, shirt) {
+    if (err) {
+      console.error(err)
+      return res.status(500).json(err)
+    }
+    if (!shirt) {
+      return res.status(404).json({message: 'shirt not found'})
+    }
 
-        res.json(newShirt);
-    });
-});
+    shirt.title = req.body.title
+    shirt.description = req.body.description
+    shirt.price = req.body.price
 
-router.put('/shirt/:shirtId', function(req, res, next) {
-  const { shirtId } = req.params;
-  const shirt = SHIRTS.find(entry => entry.id === shirtId);
-  if (!shirt) {
-    return res.status(404).end(`Could not find shirt '${shirtId}'`);
-  }
-
-  shirt.name = req.body.name;
-  shirt.description = req.body.description;
-  res.json(shirt);
-});
+    shirt.save(function (err, savedshirt) {
+      if (err) {
+        console.error(err)
+        return res.status(500).json(err)
+      }
+      res.json(savedshirt)
+    })
+  })
+})
 
 router.delete('/shirt/:shirtId', function (req, res, next) {
-  const { shirtId } = req.params;
-  const shirt = SHIRTS.find(entry => entry.id === shirtId);
+  const { shirtId } = req.params
+  const shirt = SHIRTS.find(entry => entry.id === shirtId)
   if (!shirt) {
-    return res.status(404).end(`Could not find shirt '${shirtId}'`);
+    return res.status(404).end(`Could not find shirt '${shirtId}'`)
   }
 
-  SHIRTS.splice(SHIRTS.indexOf(shirt), 1);
-  res.json(SHIRTS);
-});
+  SHIRTS.splice(SHIRTS.indexOf(shirt), 1)
+  res.json(SHIRTS)
+})
 
-
-module.exports = router;
+module.exports = router

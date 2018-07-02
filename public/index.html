@@ -11,7 +11,8 @@
     <div id="list-container"></div>
     <div id="form-container" class="panel">
       <form id="add-shirt-form" style="display: none;">
-        <legend>Shirt</legend>
+        <legend id="form-label">Shirt</legend>
+        <input type="hidden" id="shirt-id" value="" />
         <div class="form-group">
           <label for="shirt-name">Name</label>
           <input type="text" class="form-control" id="shirt-name" placeholder="Name">
@@ -41,6 +42,7 @@
            showAddShirtForm();
         });
         refreshShirtList();
+        setForm();
       });
     </script>
     <script src="/js/app.js"></script>
