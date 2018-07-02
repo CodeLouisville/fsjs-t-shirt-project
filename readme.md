@@ -50,7 +50,7 @@ function listItemTemplate(data) {
 
 2. Add some functionality to that button.  Add an `onclick` event handler and its corresponding function.
 ```html
-<button type="button" class="btn btn-xs btn-default" onclick="handleEditshirtClick()">Edit</button>
+<button type="button" class="btn btn-xs btn-default" onclick="handleEditShirtClick()">Edit</button>
 ```
 
 And the function goes in `/public/js/app.js`
@@ -66,7 +66,7 @@ Add a custom attribute called `data-shirt-id` to the button.  Make the value of 
 
 3. Pass the `_id` parameter to the funciton
   ```html
-  <button type="button" class="btn btn-xs btn-default" onclick="handleEditShirtClick(this)" data-shirt-id="${shirt._id}">Edit</button>
+  <button type="button" class="btn btn-xs btn-default" onclick="handleEditShirtClick(this)" data-shirt-id="${item._id}">Edit</button>
   ```
 
   And now `console.log()` the result to show it works
@@ -115,7 +115,7 @@ function handleEditShirtClick (element) {
 
   const shirt = window.shirtList.find(shirt => shirt._id === shirtId)
   if (shirt) {
-    $('#shirt-title').val(shirt.title);
+    $('#shirt-name').val(shirt.name);
     $('#shirt-description').val(shirt.description);
     $('#shirt-price').val(shirt.price);
   }
@@ -211,8 +211,9 @@ function submitShirtForm() {
   console.log("You clicked 'submit'. Congratulations.");
  
   const shirtData = {
-    title: $('#shirt-title').val(),
+    name: $('#shirt-name').val(),
     description: $('#shirt-description').val(),
+    price: $('#shirt-price').val()
   };
  
   fetch('/api/shirt', {
@@ -293,7 +294,7 @@ function submitShirtForm() {
   console.log("You clicked 'submit'. Congratulations.");
  
   const shirtData = {
-    title: $('#shirt-title').val(),
+    name: $('#shirt-name').val(),
     description: $('#shirt-description').val(),
     price: $('#shirt-price').val(),
     _id: $('#shirt-id').val()
@@ -352,7 +353,7 @@ router.put('/shirt/:shirtId', function(req, res, next) {
       return res.status(404).json({message: "shirt not found"});
     }
 
-    shirt.title = req.body.title;
+    shirt.name = req.body.name;
     shirt.description = req.body.description;
     shirt.price = req.body.price;
 
