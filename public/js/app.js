@@ -81,6 +81,10 @@ function hideAddShirtForm () {
   $('#add-shirt-form').hide()
 }
 
+function showAddShirtForm () {
+ $('#add-shirt-form').show()
+}
+
 function handleEditShirtClick (element) {
   const shirtId = element.getAttribute('data-shirt-id')
 
