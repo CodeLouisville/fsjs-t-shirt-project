@@ -1,367 +1,154 @@
-# FSJS Week 7 - Change is the Only Constant
+# FSJS Week 8 - Delete the negative; Accentuate the positive!
 
 **Outline**
 
-1. Set up for week7
-2. Every shirt item has an edit button
-3. Function to push changes to the server
-3. PUT endpoint
+1. Set up for week8
+2. What is a soft delete?
+3. Update our model and handlers
+4. Delete handler
+5. Baby-step our way to a delete button
 
 
 ## 1. Setup Project
-1. Check out a clean week6 branch
+
+**Check out a clean week8 branch**
 ```
 cd fsjs-t-shirt-project
 git status
 git add .
 git commit -m "My commit message"
-git checkout --track origin/week7
+git checkout --track origin/week8
 npm install
 ```
 
-**Strategy:**
-* A User will visit the site and see an edit button beside each shirt.
-* Clicking on this button will cause the Add shirt form to be populated with the shirt data
-* Our user will use that form to edit the existing shirt.
-* The `Submit` button will trigger a javascript function that grabs the data from the form and PUTs it to an API endpoint
-* After PUTting the data and receiving a response, the page will refresh the list of shirts.
+## 2. What is a soft delete
 
-## 2. Add an edit button to each item.
+**Deleting Can Be Hazardous to your Health**
+It is difficult to make deleting (as in, actually removing something from the database) save.  Meaning, if you give users the ability to destroy data, eventually they will do it by accident.  Without some means of recovering that data, deleting can make managers and clients sad.
 
-1. We need to edit the template that outputs each shirt item.  Open `public/js/app.js` and edit the template found in the `listItemTemplate` function. Add a button to each item.
+**So Don't Do It**
+Simply mark a database entry as `deleted` instead.  That way, you can exclude "deleted" items from your searches AND recover those items (undelete with ease).
+
+## 3. So let's apply that idea to our model
+1. In `/src/models/shirt.model.js`, update our model so that it has a `deleted` field:
 ```javascript
-// our jquery template string
-function listItemTemplate(data) {
-    var compiled = '';
-    data.forEach(item => {
-      compiled += `
-        <li class="list-group-item">
-          <strong>${item.name}</strong> - ${item.description} - ${item.price}
-          <span class="pull-right">
-            <button type="button" class="btn btn-xs btn-default">Edit</button>
-          </span>
-        </li>
-      `;
-    });
-    compiled = `<ul class="list-group">${compiled}</ul>`;
-    return compiled;
-}
-```
-
-2. Add some functionality to that button.  Add an `onclick` event handler and its corresponding function.
-```html
-<button type="button" class="btn btn-xs btn-default" onclick="handleEditshirtClick()">Edit</button>
-```
-
-And the function goes in `/public/js/app.js`
-```javascript
-function handleEditShirtClick() {
-  console.log("I will edit for you!");
-}
-```
-
-This works, but every 'Edit' does the exact same thing when clicked.  We want a click to (eventually) fill the form with the data for a specific shirt.  We need somehow get the shirt data in to our `handleEditshirtClick()` function.  There are dozens of ways of accomplishing this.  Here's a straight-forward method:  
-
-Add a custom attribute called `data-shirt-id` to the button.  Make the value of that attribute equal to the `_id` field of the shirt.  Pass the element (using `this`) to the `handleEditshirtClick` function and pull the `_id` field from the element.  Then use that id to find the shirt in an array.  We'll need to make sure we have an array of shirt objects available.
-
-3. Pass the `_id` parameter to the funciton
-  ```html
-  <button type="button" class="btn btn-xs btn-default" onclick="handleEditShirtClick(this)" data-shirt-id="${shirt._id}">Edit</button>
-  ```
-
-  And now `console.log()` the result to show it works
-  ```javascript
-  function handleEditShirtClick(element) {
-    const shirtId = element.getAttribute('data-shirt-id');
-    console.log("I will edit for you", shirtId);
-  }
-  ```
-
-  Take a look at the edit button element to see what's going on here.
-
-4. Whenever we refresh the list of shirts (remember our AJAX call), save that array to a property on the global `window` object.  This is done in `refreshShirtList()`
-```javascript
-function refreshShirtList () {
-  getShirts()
-    .then(shirts => {
-      window.shirtList = shirts;
-      $('#list-container').html(listItemTemplate(shirts))
-    })
-}
-```
-
-5. In our `onclick` handler, retrieve the shirt using `Array.find()`
-```javascript
-function handleEditShirtClick(element) {
-  const shirtId = element.getAttribute('data-shirt-id');
-
-  const shirt = window.shirtList.find(shirt => shirt._id === shirtId);
-  if (shirt) {
-    console.log("I will edit you!", shirt);
-  } else {
-    console.log("Aw shucks, I didn't find", shirtId)
-  }
-}
-```
-[Documentation for Array.find()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find?v=control)
-
-  Refresh the page and click on a few `Edit` buttons to see that it works.
-
-
-6. Edit the `handleEditShirtClick()` function so that it opens the form we created last week.  When clicked, we should also populate the form with the data we wish to edit.
-```javascript
-function handleEditShirtClick (element) {
-  const shirtId = element.getAttribute('data-shirt-id')
-
-  const shirt = window.shirtList.find(shirt => shirt._id === shirtId)
-  if (shirt) {
-    $('#shirt-title').val(shirt.title)
-    $('#shirt-description').val(shirt.description)
-    $('#shirt-price').val(shirt.price)
-  }
-}
-```
-
-7. Hey, what about the `_id` field?  That seems important.  Add a hidden input to the form and set that when we click edit.
-```html
-<form id="add-shirt-form">
-  <input type="hidden" id="shirt-id" value="" />
-  ...
-```
-
-```javascript
-function handleEditShirtClick(element) {
-  const shirtId = element.getAttribute('data-shirt-id')
-
-  const shirt = window.shirtList.find(shirt => shirt._id === shirtId)
-  if (shirt) {
-    $('#shirt-name').val(shirt.name)
-    $('#shirt-description').val(shirt.description)
-    $('#shirt-price').val(shirt.price)
-    $('#shirt-id').val(shirt._id)
-  }
-
-  showAddShirtForm()
-}
-```
-
-## Two quick problems
-
-1. We forgot to add the ability to clear the form
-2. We can't really tell if we are adding or editing a shirt
-
-We can solve the first problem by setting all the form fields to blank.
-```javascript
-function setForm() {
-  $('#shirt-name').val('')
-  $('#shirt-description').val('')
-  $('#shirt-price').val('')
-  $('#shirt-id').val('')
-}
-```
-
-**BUT WAIT!**
-That looks remarkably like the code we used in `handleEditShirtClick()`.  With a small change, we can reuse this function:
-```javascript
-function setForm(data) {
-  data = data || {};
-
-  const shirt = {
-    name: data.name || '',
-    description: data.description || '',
-    price: data.price || '',
-    _id: data._id || '',
-  };
-
-  $('#shirt-name').val(shirt.name);
-  $('#shirt-description').val(shirt.description);
-  $('#shirt-price').val(shirt.price);
-  $('#shirt-id').val(shirt._id);
-}
-```
-
-If we don't pass anything to setForm, all the fields get empty strings.  If we pass a shirt to the function, then the form gets populated.  Now we can use that...
-
-...in `handleEdifShirtClick`
-```javascript
-function handleEditShirtClick(element) {
-    const shirtId = element.getAttribute('data-shirt-id');
-
-    const shirt = window.shirtList.find(shirt => shirt._id === shirtId);
-    if (shirt) {
-      setForm(shirt)
-    }
-    showAddShirtForm()
-  }
-```
-
-... in `cancelShirtForm`
-```javascript
-function cancelShirtForm () {
-  setForm()
-  hideAddShirtForm()
-}
-```
-
-...in `submitShirtForm` (to clear the data when we are done)
-```javascript
-function submitShirtForm() {
-  console.log("You clicked 'submit'. Congratulations.");
- 
-  const shirtData = {
-    title: $('#shirt-title').val(),
-    description: $('#shirt-description').val(),
-  };
- 
-  fetch('/api/shirt', {
-    method: 'post',
-    body: JSON.stringify(shirtData),
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-    .then(response => response.json())
-    .then(shirt => {
-      console.log("we have posted the data", shirt);
-      setForm();
-      refreshshirtList();
-    })
-    .catch(err => {
-      console.error("A terrible thing has happened", err);
-    }) 
-}
-```
-
-...and just to be complete, set the form on page load:
-```javascript
-$(document).ready(function () {
-  refreshShirtList();
-  setForm();
+const ShirtSchema = new mongoose.Schema({
+  name: { type: String },
+  description: String,
+  price: Number,
+  created_at: { type: Date, default: Date.now },
+  deleted: { type: Boolean }
 });
 ```
 
-But what about the second problem?  Hey, we gotta solution for that too.  
+2. Now make sure that our route handlers know to exclude "deleted" items. In `src/routes/index.js` update the `GET /file` handler:
+```javascript
+router.get('/shirt', function (req, res, next) {
+  shirt.find({deleted: {$ne: true}}, function (err, shirts) {
+    if (err) {
+      console.log(err)
+      return res.status(500).json(err)
+    }
 
-**Strategy:**
-Every time the form is set, check if there is an `_id` field.  
-If yes, then the form is editing.  If no, then the form is adding. 
-Change the form legend accordingly.
+    res.json(shirts)
+  })
+})
+```
+So, why not just `{deleted: false}`?
+[Documentation for Mongo's $ne operator](https://docs.mongodb.com/manual/reference/operator/query/ne/)
 
-1. Add an `id` field to the legend element
+## 4. Let's do some deleting
+1. We can now update the `DELETE /shirt/:shirtId` handler in `src/routes/index.js` to actually do something.  Since we aren't removing the file, "deleting" will basically be updating the file.  In other works `DELETE /shirt/:shirtId` will look really similar to `PUT /shirt/:shirtId`:
+```javascript
+router.delete('/shirt/:shirtId', function (req, res, next) {
+  const shirtId = req.params.shirtId
+
+  shirt.findById(shirtId, function (err, shirt) {
+    if (err) {
+      console.log(err)
+      return res.status(500).json(err)
+    }
+    if (!shirt) {
+      return res.status(404).json({message: 'Shirt not found'})
+    }
+
+    shirt.deleted = true
+
+    shirt.save(function (err, doomedShirt) {
+      res.json(doomedShirt)
+    })
+  })
+})
+```
+How would you implement an `undelete` operation?
+
+## 5. Baby-step our way through the front-end stuff
+1. Make a "Delete" button appear by each file, just next to the "Edit" button.  Open `public/js/app.js` and add this just after the edit button, in `listItemTemplate`
 ```html
-<legend id="form-label">Shirt</legend>
+<button type="button" class="btn btn-xs btn-danger">Del</button>
 ```
 
-2. Add a little logic to `setForm` the set the legend text
+2. Now make it do something by adding an `onclick` handler (we can copy/paste from the "Edit" button and then change it to suit our needs):
+```html
+<button type="button" class="btn btn-xs btn-danger" onclick="handleDeleteShirtClick(this)" data-shirt-id="${item._id}">Del</button>
+```
+
+3. Create the `handleDeleteShirtClick()` function in `public/js/app.js`:
 ```javascript
-function setForm(data) {
-  data = data || {};
+function handleDeleteShirtClick(element) {
+  const shirtId = element.getAttribute('data-shirt-id');
 
-  const shirt = {
-    name: data.name || '',
-    description: data.description || '',
-    price: data.price || '',
-    _id: data._id || '',
-  };
+  console.log("Shirt", shirtId, "is DOOMED!!!!!!");
+}
+```
 
-  $('#shirt-name').val(shirt.name);
-  $('#shirt-description').val(shirt.description);
-  $('#shirt-price').val(shirt.price);
-  $('#shirt-id').val(shirt._id);
+4. Er....maybe we should ask for confirmation before doing this:
+```javascript
+function handleDeleteShirtClick(element) {
+  const shirtId = element.getAttribute('data-shirt-id');
 
-  if (shirt._id) {
-    $('#form-label').text("Edit shirt");
-  } else {
-    $('#form-label').text("Add shirt");
+  if (confirm("Are you sure?")) {
+    console.log("Shirt", shirtId, "is DOOMED!!!!!!");
   }
 }
 ```
 
-Voila.
-
-## Push our changes to the server.
-
-  Most of the hard work on the front-end has been done.  Really, the only difference between creating a new shirt and editing an existing one is that when creating, we `POST` to the server and we don't have an `_id` field, while when editing, we `PUT` to the server AND the URL is slightly different (we add the `_id` field to the url).
-
-  We can accomplish this by checking to see if `#shirt-id` has a value.  If it does, we are editing, if it doesn't we are creating.
-
-1. In `submitShirtForm()` get the `#shirt-id` value and check if we are PUTting or POSTing
+5. Much better.  Now instead of logging out a message, let's send an ajax `DELETE` message to `/shirt/:shirtId` to have the shirt deleted:
 ```javascript
-function submitShirtForm() {
-  console.log("You clicked 'submit'. Congratulations.");
- 
-  const shirtData = {
-    title: $('#shirt-title').val(),
-    description: $('#shirt-description').val(),
-    price: $('#shirt-price').val(),
-    _id: $('#shirt-id').val()
-  };
+function handleDeleteShirtClick(element) {
+  const shirtId = element.getAttribute('data-shirt-id');
 
-  let method, url;
-  if (shirtData._id) {
-    method = 'PUT';
-    url = '/api/shirt/' + shirtData._id;
-  } else {
-    method = 'POST';
-    url = '/api/shirt';
+if (confirm("Are you sure?")) {
+    deleteShirt(shirtId);
   }
- 
+}
+```
+
+6. Aaaaand we'll create that function (We can look at `submitShirtForm()` to remind ourselves how to do it):
+```javascript
+function deleteShirt(shirtId) {
+  const url = '/api/shirt/' + shirtId;
+
   fetch(url, {
-    method: method,
-    body: JSON.stringify(shirtData),
-    headers: {
-      'Content-Type': 'application/json'
-    }
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' }
   })
     .then(response => response.json())
-    .then(shirt => {
-      console.log("we have updated the data", shirt);
-      cancelShirtForm();
+    .then(response => {
+      console.log("DOOOOOOOOOM!!!!!");
       refreshShirtList();
     })
     .catch(err => {
-      console.error("A terrible thing has happened", err);
-    }) 
+      console.error("I'm not dead yet!", err);
+    });
 }
 ```
-That should do it, but when we try it, we get an error.  Why?
 
-
-## Handle that PUT
-
-1. In `/src/routes/index.js`, clear out our previous, Array-based `PUT /api/shirt/:shirtId` route:
-  ```javascript
-  router.put('/shirt/:shirtId', function(req, res, next) {
-
-  });
-  ```
-
-2. Our strategy here is to find the shirt we're trying to edit in the database, then edit it, then save it
-```javascript
-router.put('/shirt/:shirtId', function(req, res, next) {
-  const shirtId = req.params.shirtId;
-
-  shirt.findById(shirtId, function(err, shirt) {
-    if (err) {
-      console.error(err);
-      return res.status(500).json(err);
-    }
-    if (!shirt) {
-      return res.status(404).json({message: "shirt not found"});
-    }
-
-    shirt.title = req.body.title;
-    shirt.description = req.body.description;
-    shirt.price = req.body.price;
-
-    shirt.save(function(err, savedshirt) {
-      if (err) {
-        console.error(err);
-        return res.status(500).json(err);
-      }
-      res.json(savedshirt);
-    })
-
-  })
-});
+## Bonus Time - Let's make it kinda prettify
+1. Change the buttons to icons, this will be pretty right? in `app.js`
+```html
+<span class="glyphicon glyphicon-pencil" onclick="handleEditShirtClick(this)" data-shirt-id="${item._id}" style="cursor: pointer;"></span>
+<span class="glyphicon glyphicon-remove" onclick="handleDeleteShirtClick(this)" data-shirt-id="${item._id}"   style="cursor: pointer;"></span>
 ```
+
+More to come in finale....
