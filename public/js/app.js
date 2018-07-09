@@ -3,15 +3,19 @@ function listItemTemplate (data) {
   var compiled = ''
   data.forEach(item => {
     compiled += `
-        <li class="list-group-item">
-          <strong>${item.name}</strong> - ${item.description} - ${item.price}
+      <div class="card" style="width: 18rem;">
+        <img class="card-img-top" src="" alt="Shirt Image">
+        <div class="card-body">
+          <h5 class="card-title">${item.name} - ${item.price}</h5>
+          <p class="card-text">${item.description}</p>
           <span class="pull-right">
-            <button type="button" class="btn btn-xs btn-default" onclick="handleEditShirtClick(this)" data-shirt-id="${item._id}">Edit</button>
+            <span class="glyphicon glyphicon-pencil" onclick="handleEditShirtClick(this)" data-shirt-id="${item._id}" style="cursor: pointer;"></span>
+            <span class="glyphicon glyphicon-remove" onclick="handleDeleteShirtClick(this)" data-shirt-id="${item._id}" style="cursor: pointer;"></span>
           </span>
-        </li>
-      `
+        </div>
+      </div>
+    `
   })
-  compiled = `<ul class="list-group">${compiled}</ul>`
   return compiled
 }
 
@@ -82,7 +86,7 @@ function hideAddShirtForm () {
 }
 
 function showAddShirtForm () {
- $('#add-shirt-form').show()
+  $('#add-shirt-form').show()
 }
 
 function handleEditShirtClick (element) {
@@ -94,6 +98,31 @@ function handleEditShirtClick (element) {
   }
 
   showAddShirtForm()
+}
+
+function handleDeleteShirtClick (element) {
+  const shirtId = element.getAttribute('data-shirt-id')
+
+  if (confirm('Are you sure?')) {
+    deleteShirt(shirtId)
+  }
+}
+
+function deleteShirt (shirtId) {
+  const url = '/api/shirt/' + shirtId
+
+  fetch(url, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' }
+  })
+    .then(response => response.json())
+    .then(response => {
+      console.log('DOOOOOOOOOM!!!!!')
+      refreshShirtList()
+    })
+    .catch(err => {
+      console.error("I'm not dead yet!", err)
+    })
 }
 
 function setForm (data) {

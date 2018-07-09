@@ -3,7 +3,7 @@ const router = require('express').Router()
 let shirt = require('../models/shirt.model.js')
 
 router.get('/shirt', function (req, res, next) {
-  shirt.find({}, function (err, shirts) {
+  shirt.find({deleted: {$ne: true}}, function (err, shirts) {
     if (err) {
       console.log(err)
       return res.status(500).json(err)
@@ -42,42 +42,52 @@ router.post('/shirt', function (req, res, next) {
   })
 })
 
-router.put('/shirt/:shirtId', function(req, res, next) {
-    const shirtId = req.params.shirtId;
+router.put('/shirt/:shirtId', function (req, res, next) {
+  const shirtId = req.params.shirtId
 
-    shirt.findById(shirtId, function(err, shirt) {
-        if (err) {
-            console.error(err);
-            return res.status(500).json(err);
-        }
-        if (!shirt) {
-            return res.status(404).json({message: "shirt not found"});
-        }
+  shirt.findById(shirtId, function (err, shirt) {
+    if (err) {
+      console.error(err)
+      return res.status(500).json(err)
+    }
+    if (!shirt) {
+      return res.status(404).json({message: 'shirt not found'})
+    }
 
-        shirt.name = req.body.name;
-        shirt.description = req.body.description;
-        shirt.price = req.body.price;
+    shirt.name = req.body.name
+    shirt.description = req.body.description
+    shirt.price = req.body.price
 
-        shirt.save(function(err, savedshirt) {
-            if (err) {
-                console.error(err);
-                return res.status(500).json(err);
-            }
-            res.json(savedshirt);
-        })
-
+    shirt.save(function (err, savedshirt) {
+      if (err) {
+        console.error(err)
+        return res.status(500).json(err)
+      }
+      res.json(savedshirt)
     })
-});
+  })
+})
 
 router.delete('/shirt/:shirtId', function (req, res, next) {
-  const { shirtId } = req.params
-  const shirt = SHIRTS.find(entry => entry.id === shirtId)
-  if (!shirt) {
-    return res.status(404).end(`Could not find shirt '${shirtId}'`)
-  }
+  const shirtId = req.params.shirtId
 
-  SHIRTS.splice(SHIRTS.indexOf(shirt), 1)
-  res.json(SHIRTS)
+  console.log(shirtId)
+  shirt.findById(shirtId, function (err, shirt) {
+    console.log(shirt)
+    if (err) {
+      console.log(err)
+      return res.status(500).json(err)
+    }
+    if (!shirt) {
+      return res.status(404).json({message: 'Shirt not found'})
+    }
+
+    shirt.deleted = true
+
+    shirt.save(function (err, doomedShirt) {
+      res.json(doomedShirt)
+    })
+  })
 })
 
 module.exports = router
