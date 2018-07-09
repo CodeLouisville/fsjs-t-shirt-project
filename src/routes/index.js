@@ -42,6 +42,7 @@ router.post('/shirt', function (req, res, next) {
   })
 })
 
+<<<<<<< Updated upstream
 router.put('/shirt/:shirtId', function (req, res, next) {
   const shirtId = req.params.shirtId
 
@@ -67,6 +68,34 @@ router.put('/shirt/:shirtId', function (req, res, next) {
     })
   })
 })
+=======
+router.put('/shirt/:shirtId', function(req, res, next) {
+    const shirtId = req.params.shirtId;
+
+    shirt.findById(shirtId, function(err, shirt) {
+        if (err) {
+            console.error(err);
+            return res.status(500).json(err);
+        }
+        if (!shirt) {
+            return res.status(404).json({message: "shirt not found"});
+        }
+
+        shirt.name = req.body.name;
+        shirt.description = req.body.description;
+        shirt.price = req.body.price;
+
+        shirt.save(function(err, savedshirt) {
+            if (err) {
+                console.error(err);
+                return res.status(500).json(err);
+            }
+            res.json(savedshirt);
+        })
+
+    })
+});
+>>>>>>> Stashed changes
 
 router.delete('/shirt/:shirtId', function (req, res, next) {
   const { shirtId } = req.params
