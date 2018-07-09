@@ -41,7 +41,7 @@ const ShirtSchema = new mongoose.Schema({
 });
 ```
 
-2. Now make sure that our route handlers know to exclude "deleted" items. In `src/routes/index.js` update the `GET /file` handler:
+2. Now make sure that our route handlers know to exclude "deleted" items. In `src/routes/index.js` update the `GET /shirt` handler:
 ```javascript
 router.get('/shirt', function (req, res, next) {
   shirt.find({deleted: {$ne: true}}, function (err, shirts) {
@@ -58,7 +58,7 @@ So, why not just `{deleted: false}`?
 [Documentation for Mongo's $ne operator](https://docs.mongodb.com/manual/reference/operator/query/ne/)
 
 ## 4. Let's do some deleting
-1. We can now update the `DELETE /shirt/:shirtId` handler in `src/routes/index.js` to actually do something.  Since we aren't removing the file, "deleting" will basically be updating the file.  In other works `DELETE /shirt/:shirtId` will look really similar to `PUT /shirt/:shirtId`:
+1. We can now update the `DELETE /shirt/:shirtId` handler in `src/routes/index.js` to actually do something.  Since we aren't removing the shirt, "deleting" will basically be updating the shirt.  In other works `DELETE /shirt/:shirtId` will look really similar to `PUT /shirt/:shirtId`:
 ```javascript
 router.delete('/shirt/:shirtId', function (req, res, next) {
   const shirtId = req.params.shirtId
@@ -83,7 +83,7 @@ router.delete('/shirt/:shirtId', function (req, res, next) {
 How would you implement an `undelete` operation?
 
 ## 5. Baby-step our way through the front-end stuff
-1. Make a "Delete" button appear by each file, just next to the "Edit" button.  Open `public/js/app.js` and add this just after the edit button, in `listItemTemplate`
+1. Make a "Delete" button appear by each shirt, just next to the "Edit" button.  Open `public/js/app.js` and add this just after the edit button, in `listItemTemplate`
 ```html
 <button type="button" class="btn btn-xs btn-danger">Del</button>
 ```
@@ -144,7 +144,7 @@ function deleteShirt(shirtId) {
 }
 ```
 
-## Bonus Time - Let's make it kinda prettify
+## 6. Bonus Time - Let's make it kinda prettify
 1. Change the buttons to icons, this will be pretty right? in `app.js`
 ```html
 <span class="glyphicon glyphicon-pencil" onclick="handleEditShirtClick(this)" data-shirt-id="${item._id}" style="cursor: pointer;"></span>
