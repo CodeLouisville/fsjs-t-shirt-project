@@ -1,5 +1,5 @@
 // our jquery template string
-function listItemTemplate (data) {
+function listItemTemplate(data) {
   var compiled = ''
   data.forEach(item => {
     compiled += `
@@ -19,7 +19,7 @@ function listItemTemplate (data) {
   return compiled
 }
 
-function getShirts () {
+function getShirts() {
   return $.ajax('/api/shirt')
     .then(res => {
       console.log('Results from getShirts()', res)
@@ -31,7 +31,7 @@ function getShirts () {
     })
 }
 
-function refreshShirtList () {
+function refreshShirtList() {
   getShirts()
     .then(shirts => {
       window.shirtList = shirts
@@ -39,7 +39,7 @@ function refreshShirtList () {
     })
 }
 
-function submitShirtForm () {
+function submitShirtForm() {
   console.log("You clicked 'submit'. Congratulations.")
 
   const shirtData = {
@@ -76,12 +76,12 @@ function submitShirtForm () {
     })
 }
 
-function cancelShirtForm () {
+function cancelShirtForm() {
   setForm()
   hideAddShirtForm()
 }
 
-function hideAddShirtForm () {
+function hideAddShirtForm() {
   $('#add-shirt-form').hide()
 }
 
@@ -89,7 +89,7 @@ function showAddShirtForm () {
   $('#add-shirt-form').show()
 }
 
-function handleEditShirtClick (element) {
+function handleEditShirtClick(element) {
   const shirtId = element.getAttribute('data-shirt-id')
 
   const shirt = window.shirtList.find(shirt => shirt._id === shirtId)
