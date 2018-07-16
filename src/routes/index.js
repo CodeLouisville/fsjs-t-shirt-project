@@ -17,12 +17,12 @@ router.get('/shirt/:shirtId', function (req, res, next) {
   const { shirtId } = req.params
   // same as 'const shirtId = req.params.shirtId'
 
-  Shirt.findById(shirtId, function(err, shirt) {
-    if(err) {
-      return res.status(500).json(err);
+  Shirt.findById(shirtId, function (err, shirt) {
+    if (err) {
+      return res.status(500).json(err)
     }
 
-    res.json(shirt);
+    res.json(shirt)
   })
 })
 
@@ -30,7 +30,8 @@ router.post('/shirt', function (req, res, next) {
   const shirtData = {
     name: req.body.name,
     description: req.body.description,
-    price: req.body.price
+    price: req.body.price,
+    image: req.body.image
   }
 
   Shirt.create(shirtData, function (err, newShirt) {
@@ -44,32 +45,32 @@ router.post('/shirt', function (req, res, next) {
 })
 
 router.put('/shirt/:shirtId', function (req, res, next) {
-  const shirtId = req.params.shirtId;
+  const shirtId = req.params.shirtId
 
   Shirt.findById(shirtId, function (err, shirt) {
     if (err) {
-      console.error(err);
-      return res.status(500).json(err);
+      console.error(err)
+      return res.status(500).json(err)
     }
     if (!shirt) {
-      return res.status(404).json({ message: "shirt not found" });
+      return res.status(404).json({ message: 'shirt not found' })
     }
 
-    shirt.name = req.body.name;
-    shirt.description = req.body.description;
-    shirt.price = req.body.price;
-    shirt.deleted = req.body.deleted;
+    shirt.name = req.body.name
+    shirt.description = req.body.description
+    shirt.price = req.body.price
+    shirt.image = req.body.image
+    shirt.deleted = req.body.deleted
 
     shirt.save(function (err, savedshirt) {
       if (err) {
-        console.error(err);
-        return res.status(500).json(err);
+        console.error(err)
+        return res.status(500).json(err)
       }
-      res.json(savedshirt);
+      res.json(savedshirt)
     })
-
   })
-});
+})
 
 router.delete('/shirt/:shirtId', function (req, res, next) {
   const shirtId = req.params.shirtId
@@ -83,7 +84,7 @@ router.delete('/shirt/:shirtId', function (req, res, next) {
       return res.status(404).json({ message: 'Shirt not found' })
     }
 
-    shirt.deleted = true;
+    shirt.deleted = true
 
     shirt.save(function (err, doomedShirt) {
       res.json(doomedShirt)

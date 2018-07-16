@@ -3,33 +3,56 @@
   <head>
     <meta charset="utf-8">
     <title>Our Glorious Node Project</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/main.css">
   </head>
   <body>
     <h1>A wild webpage appears...</h1>
-    <div><legend>Shirts: <span id="add-shirt-button" class="glyphicon glyphicon-align-left glyphicon-plus-sign" aria-hidden="true"></span></legend></div>
+    <div><legend>Shirts: <span id="add-shirt-button" class="oi oi-plus" data-toggle="modal" data-target="#tshirtModal"></span></legend></div>
     <div id="list-container"></div>
-    <div id="form-container" class="panel">
-      <form id="add-shirt-form" style="display: none;">
-        <legend id="form-label">Shirt</legend>
-        <input type="hidden" id="shirt-id" value="" />
-        <div class="form-group">
-          <label for="shirt-name">Name</label>
-          <input type="text" class="form-control" id="shirt-name" placeholder="Name">
-        </div>
-        <div class="form-group">
-          <label for="shirt-description">Description</label>
-          <input type="text" class="form-control" id="shirt-description" placeholder="Description">
-        </div>
-        <div class="form-group">
-          <label for="shirt-price">Price</label>
-          <input type="text" class="form-control" id="shirt-price" placeholder="Price">
-        </div>
-        <button type="button" onclick="submitShirtForm()" class="btn btn-success">Submit</button>
-        <button type="button" onclick="cancelShirtForm()" class="btn btn-link">cancel</button>
-      </form>
+  
+
+<div class="modal fade" id="tshirtModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="tshirtModalLabel">New Shirt</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="add-shirt-form" style="display: none;">
+          <input type="hidden" id="shirt-id" value="" />
+          <div class="form-group">
+            <label for="shirt-name">Name</label>
+            <input type="text" class="form-control" id="shirt-name" placeholder="Name">
+          </div>
+          <div class="form-group">
+            <label for="shirt-description">Description</label>
+            <input type="text" class="form-control" id="shirt-description" placeholder="Description">
+          </div>
+          <div class="form-group">
+            <label for="shirt-price">Price</label>
+            <input type="text" class="form-control" id="shirt-price" placeholder="Price">
+          </div>
+          <div class="form-group">
+            <label for="shirt-image">Image</label>
+            <input type="text" class="form-control" id="shirt-image" placeholder="Image">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" onclick="submitShirtForm()" class="btn btn-primary" data-dismiss="modal">Submit</button>
+        <button type="button" onclick="cancelShirtForm()" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      </div>
     </div>
+  </div>
+</div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
     <script>
       $(document).ready(function() {
         // setup the title of the page and greeting
@@ -41,6 +64,16 @@
         $('#add-shirt-button').on('click', () => {
            showAddShirtForm();
         });
+
+        $('#tshirtModal').on('show.bs.modal', function (event) {
+          var button = $(event.relatedTarget) // Button that triggered the modal
+          var shirtid = button.data('shirtid') // Extract info from data-* attributes
+          // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+          // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+
+          var modal = $(this)
+          handleEditShirtClick(shirtid)
+        })
         refreshShirtList();
         setForm();
       });

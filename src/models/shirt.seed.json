@@ -2,21 +2,25 @@
     {
       "name": "iron man shirt",
       "description": "iron man flying high",
-      "price": 9.99
+      "price": 9.99,
+      "image": "https://images-na.ssl-images-amazon.com/images/I/71Lv55DbRyL._SX385_.jpg"
     },
     {
       "name": "cats-r-us",
       "description": "toys-r-us logo saying cats-r-us",
-      "price": 8.99
+      "price": 8.99,
+      "image": "http://www.teesrus.ltd/wp-content/uploads/2017/11/mockup-15fbeec5-510x600.jpg"
     },
     {
       "name": "coffee",
       "description": "a cup of coffee elegantly portrayed",
-      "price": 11.99
+      "price": 11.99,
+      "image": "https://d2u0y5401q13uw.cloudfront.net/media/catalog/product/cache/3/image/9df78eab33525d08d6e5fb8d27136e95/c/o/coffee-m3-1312.jpg"
     },
     {
       "name": "dogs",
       "description": "need i say more?",
-      "price": 89.99
+      "price": 89.99,
+      "image": "https://res.cloudinary.com/teepublic/image/private/s--JgHIprw4--/t_Resized%20Artwork/c_crop,x_10,y_10/c_fit,w_470/c_crop,g_north_west,h_626,w_470,x_0,y_0/g_north_west,u_upload:v1462829024:production:blanks:a59x1cgomgu5lprfjlmi,x_-395,y_-325/b_rgb:eeeeee/c_limit,f_jpg,h_630,q_90,w_630/v1521912236/production/designs/2525492_0.jpg"
     }
   ]

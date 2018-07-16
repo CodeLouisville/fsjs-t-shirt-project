@@ -1,25 +1,26 @@
 // our jquery template string
-function listItemTemplate(data) {
+function listItemTemplate (data) {
   var compiled = ''
   data.forEach(item => {
     compiled += `
-      <div class="card" style="width: 18rem;">
-        <img class="card-img-top" src="" alt="Shirt Image">
+      <div class="child">
+        <img class="card-img-top" src="${item.image}" alt="Shirt Image">
         <div class="card-body">
-          <h5 class="card-title">${item.name} - ${item.price}</h5>
+          <div class="card-title">${item.name} - ${item.price}</div>
           <p class="card-text">${item.description}</p>
           <span class="pull-right">
-            <span class="glyphicon glyphicon-pencil" onclick="handleEditShirtClick(this)" data-shirt-id="${item._id}" style="cursor: pointer;"></span>
-            <span class="glyphicon glyphicon-remove" onclick="handleDeleteShirtClick(this)" data-shirt-id="${item._id}" style="cursor: pointer;"></span>
+            <span class="oi oi-pencil" onclick="handleEditShirtClick(this)" data-shirtid="${item._id}" data-toggle="modal" data-target="#tshirtModal" style="cursor: pointer;"></span>
+            <span class="oi oi-minus" onclick="handleDeleteShirtClick(this)" data-shirtid="${item._id}" style="cursor: pointer;"></span>
           </span>
         </div>
       </div>
     `
   })
+  compiled = `<div class="parent" id="container">${compiled}</div>`
   return compiled
 }
 
-function getShirts() {
+function getShirts () {
   return $.ajax('/api/shirt')
     .then(res => {
       console.log('Results from getShirts()', res)
@@ -31,21 +32,27 @@ function getShirts() {
     })
 }
 
-function refreshShirtList() {
+function refreshShirtList () {
   getShirts()
     .then(shirts => {
+      console.log(shirts)
       window.shirtList = shirts
       $('#list-container').html(listItemTemplate(shirts))
     })
+    .fail(err => {
+      console.log('Error in getShirts()', err)
+      throw err
+    })
 }
 
-function submitShirtForm() {
+function submitShirtForm () {
   console.log("You clicked 'submit'. Congratulations.")
 
   const shirtData = {
     name: $('#shirt-name').val(),
     description: $('#shirt-description').val(),
     price: $('#shirt-price').val(),
+    image: $('#shirt-image').val(),
     _id: $('#shirt-id').val()
   }
 
@@ -76,12 +83,12 @@ function submitShirtForm() {
     })
 }
 
-function cancelShirtForm() {
+function cancelShirtForm () {
   setForm()
   hideAddShirtForm()
 }
 
-function hideAddShirtForm() {
+function hideAddShirtForm () {
   $('#add-shirt-form').hide()
 }
 
@@ -89,8 +96,8 @@ function showAddShirtForm () {
   $('#add-shirt-form').show()
 }
 
-function handleEditShirtClick(element) {
-  const shirtId = element.getAttribute('data-shirt-id')
+function handleEditShirtClick (shirtId) {
+  // const shirtId = element.getAttribute('data-shirt-id')
 
   const shirt = window.shirtList.find(shirt => shirt._id === shirtId)
   if (shirt) {
@@ -101,7 +108,7 @@ function handleEditShirtClick(element) {
 }
 
 function handleDeleteShirtClick (element) {
-  const shirtId = element.getAttribute('data-shirt-id')
+  const shirtId = element.getAttribute('data-shirtid')
 
   if (confirm('Are you sure?')) {
     deleteShirt(shirtId)
@@ -132,12 +139,14 @@ function setForm (data) {
     name: data.name || '',
     description: data.description || '',
     price: data.price || '',
+    image: data.image || '',
     _id: data._id || ''
   }
 
   $('#shirt-name').val(shirt.name)
   $('#shirt-description').val(shirt.description)
   $('#shirt-price').val(shirt.price)
+  $('#shirt-image').val(shirt.image)
   $('#shirt-id').val(shirt._id)
 
   if (shirt._id) {

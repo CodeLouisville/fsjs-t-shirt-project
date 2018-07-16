@@ -2,12 +2,13 @@
 const mongoose = require('mongoose')
 
 const ShirtSchema = new mongoose.Schema({
-    name: { type: String },
-    description: String,
-    price: Number,
-    created_at: { type: Date, default: Date.now },
-    deleted: { type: Boolean }
-});
+  name: { type: String },
+  description: String,
+  price: Number,
+  image: String,
+  created_at: { type: Date, default: Date.now },
+  deleted: { type: Boolean }
+})
 
 const Shirt = mongoose.model('Shirt', ShirtSchema)
 

@@ -1,0 +1,11 @@
+.parent {
+  display: flex;
+  height: 500px; /* Or whatever */
+  flex-flow: row wrap;
+}
+
+.child {
+  width: 200px;  /* Or whatever */
+  height: 500px; /* Or whatever */
+  margin: auto;  /* Magic! */
+}
